@@ -15,6 +15,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+    const data = await request.json()
+    const conversation = await 
+
     /*const data = await request.json()
     const { senderId, message, conversationId } = data
     const conversation = await Conversation.findById(conversationId)
