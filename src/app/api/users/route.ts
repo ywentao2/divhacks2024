@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import dbConnect from '@/utils/dbConnect'
 import User from "@/models/User"
-import { useUser } from '@auth0/nextjs-auth0/client'
+import { getSession } from "@auth0/nextjs-auth0"
 
 export async function GET() {
     try {
@@ -15,13 +15,21 @@ export async function GET() {
 
 export async function POST(request: Request) {
     await dbConnect()
-    const { user } = useUser();
-    const id = user?.nickname
-    const newUser = new User({
-        username: id
-    })
+    const session = await getSession();
 
-    await newUser.save()
+    if (session && session.user) {
+        const id = session.user?.nickname
+        console.log(id)
 
-    return NextResponse.json({ user })
+        const newUser = new User({
+            username: id
+        })
+
+        await newUser.save()
+
+        return NextResponse.json({ newUser })
+    }
+    else{
+        return NextResponse.json({ message: "error" })
+    }
 }
