@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  Settings,
   HomeIcon,
   UserIcon,
   InboxIcon,
@@ -20,7 +21,7 @@ import Link from "next/link";
 
 const MyNavbar = () => {
   const isEmployer = true;
-  const isLoggedIn = true;
+  const isLoggedIn = false;
   const dashboardLink = isEmployer
     ? "/employer-dashboard"
     : "/student-dashboard";
@@ -72,15 +73,15 @@ const MyNavbar = () => {
               <GraduationCapIcon className="h-6 w-6" />
               <span>Browse</span>
             </Button>
-            <Button variant="ghost" className="flex items-center space-x-2">
+            <Link href='/inbox' className="flex items-center space-x-2">
               <InboxIcon className="h-5 w-5 font-bold" />
               <span>Inbox</span>
-            </Button>
+            </Link>
           </nav>
           <div className="flex items-center flex-1 justify-end">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
+                <Button size="icon" className="rounded-full" >
                   <Avatar>
                     <AvatarImage
                       src={
@@ -90,7 +91,7 @@ const MyNavbar = () => {
                       }
                       alt="User"
                     />
-                    <AvatarFallback>{isLoggedIn ? "U" : "G"}</AvatarFallback>
+                    <AvatarFallback>{isLoggedIn ? "U" : " "}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
@@ -120,6 +121,11 @@ const MyNavbar = () => {
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
+            <Link href="/settings" className="ml-3 rounded-full bg-white p-1 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              <span className="sr-only">Settings</span>
+              <Settings className="h-6 w-6" aria-hidden="true" />
+            </Link>
+
           </div>
         </div>
       </div>
