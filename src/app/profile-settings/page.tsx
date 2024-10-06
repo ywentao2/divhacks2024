@@ -17,6 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { PlusCircle, Trash2 } from 'lucide-react'
 import React from 'react'
 import MyNavbar from '../navbar'
+import "../globals.css"
 
 
 type Profile = {
