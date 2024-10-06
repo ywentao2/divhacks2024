@@ -279,26 +279,18 @@ export default function StudentDashboard() {
                           <div className="space-y-2">
                             {["In Person", "Online", "Hybrid"].map((type) => (
                               <div key={type} className="flex items-center">
-                                <Checkbox
+                                <input
+                                  type="radio"
                                   id={`type-${type}`}
+                                  name="eventType"
+                                  value={type}
                                   checked={eventFilters.eventType.includes(
                                     type
                                   )}
-                                  onCheckedChange={(checked) => {
-                                    if (checked) {
-                                      handleEventFilterChange("eventType", [
-                                        ...eventFilters.eventType,
-                                        type,
-                                      ]);
-                                    } else {
-                                      handleEventFilterChange(
-                                        "eventType",
-                                        eventFilters.eventType.filter(
-                                          (t) => t !== type
-                                        )
-                                      );
-                                    }
-                                  }}
+                                  onChange={() =>
+                                    handleEventFilterChange("eventType", type)
+                                  }
+                                  className="form-radio h-4 w-4 text-indigo-600"
                                 />
                                 <label
                                   htmlFor={`type-${type}`}
@@ -387,26 +379,19 @@ export default function StudentDashboard() {
                               "New Grad",
                             ].map((support) => (
                               <div key={support} className="flex items-center">
-                                <Checkbox
+                                <input
+                                  type="radio"
                                   id={`support-${support}`}
-                                  checked={eventFilters.gradSupport.includes(
-                                    support
-                                  )}
-                                  onCheckedChange={(checked) => {
-                                    if (checked) {
-                                      handleEventFilterChange("gradSupport", [
-                                        ...eventFilters.gradSupport,
-                                        support,
-                                      ]);
-                                    } else {
-                                      handleEventFilterChange(
-                                        "gradSupport",
-                                        eventFilters.gradSupport.filter(
-                                          (s) => s !== support
-                                        )
-                                      );
-                                    }
-                                  }}
+                                  name="gradSupport"
+                                  value={support}
+                                  checked={eventFilters.gradSupport.includes(support)}
+                                  onChange={() =>
+                                    handleEventFilterChange(
+                                      "gradSupport",
+                                      support
+                                    )
+                                  }
+                                  className="form-radio h-4 w-4 text-indigo-600"
                                 />
                                 <label
                                   htmlFor={`support-${support}`}

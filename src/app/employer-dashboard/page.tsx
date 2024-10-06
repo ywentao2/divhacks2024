@@ -6,19 +6,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { HomeIcon, UserIcon, BriefcaseIcon, FileTextIcon, LogOutIcon, SearchIcon, PlusIcon, VideoIcon, MessageSquareIcon, CalendarIcon } from 'lucide-react'
+import { SearchIcon, PlusIcon, VideoIcon, MessageSquareIcon, CalendarIcon, MessageCircleIcon } from 'lucide-react'
 import { Switch } from "@/components/ui/switch"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { EditIcon, TrashIcon } from 'lucide-react'
 import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import "../globals.css"
+import '../globals.css'
 import MyNavbar from '../navbar';
 
 export default function EmployerDashboard() {
@@ -36,6 +34,7 @@ export default function EmployerDashboard() {
     category: []
   })
   const [quickNote, setQuickNote] = useState("")
+  const [dateSort, setDateSort] = useState("latest")
 
   const applicants = [
     { 
@@ -107,14 +106,22 @@ export default function EmployerDashboard() {
     }))
   }
 
-  const filteredApplicants = applicants.filter(applicant => {
-    if (searchQuery && !applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) && !applicant.role.toLowerCase().includes(searchQuery.toLowerCase())) return false
-    if (applicantFilters.educationLevel.length > 0 && !applicantFilters.educationLevel.some(level => applicant.education.includes(level))) return false
-    if (applicantFilters.experience.length > 0 && !applicantFilters.experience.some(exp => applicant.experience.includes(exp))) return false
-    if (applicantFilters.skills.length > 0 && !applicantFilters.skills.some(skill => applicant.skills.includes(skill))) return false
-    if (applicantFilters.category.length > 0 && !applicantFilters.category.includes(applicant.category)) return false
-    return true
-  })
+  const filteredApplicants = applicants
+    .filter(applicant => {
+      if (searchQuery && !applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) && !applicant.role.toLowerCase().includes(searchQuery.toLowerCase())) return false
+      if (applicantFilters.educationLevel.length > 0 && !applicantFilters.educationLevel.some(level => applicant.education.includes(level))) return false
+      if (applicantFilters.experience.length > 0 && !applicantFilters.experience.some(exp => applicant.experience.includes(exp))) return false
+      if (applicantFilters.skills.length > 0 && !applicantFilters.skills.some(skill => applicant.skills.includes(skill))) return false
+      if (applicantFilters.category.length > 0 && !applicantFilters.category.includes(applicant.category)) return false
+      return true
+    })
+    .sort((a, b) => {
+      if (dateSort === "latest") {
+        return new Date(b.applicationDate).getTime() - new Date(a.applicationDate).getTime()
+      } else {
+        return new Date(a.applicationDate).getTime() - new Date(b.applicationDate).getTime()
+      }
+    })
 
   // Company Profile State and Handlers
   const [profile, setProfile] = useState({
@@ -160,21 +167,25 @@ export default function EmployerDashboard() {
     ))
   }
 
-  return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <MyNavbar />
+  const handleStartChat = (applicant: { id?: number; name: any; role?: string; education?: string; experience?: string; skills?: string[]; background?: string; category?: string; applicationDate?: string; appliedFor?: string }) => {
+    console.log(`Starting chat with ${applicant.name}`)
+    // Implement chat functionality here
+  }
 
-      <main className="container mx-auto px-4 py-8">
+  return (
+    <>
+    <div>
+      <MyNavbar />
+    </div><main className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <Card>
             <CardContent className="p-6">
               <form className="flex space-x-4">
                 <div className="flex-grow">
-                  <Input 
-                    placeholder="Search applicants or events" 
+                  <Input
+                    placeholder="Search applicants or events"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
+                    onChange={(e) => setSearchQuery(e.target.value)} />
                 </div>
                 <Button type="submit">
                   <SearchIcon className="h-4 w-4 mr-2" />
@@ -208,21 +219,32 @@ export default function EmployerDashboard() {
                       </CardHeader>
                       <CardContent className="space-y-6">
                         <div>
+                          <label className="text-sm font-medium mb-2 block">Application Date</label>
+                          <Select value={dateSort} onValueChange={setDateSort}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select date order" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="latest">Latest to Oldest</SelectItem>
+                              <SelectItem value="oldest">Oldest to Latest</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
                           <label className="text-sm font-medium mb-2 block">Category</label>
                           <div className="space-y-2">
                             {["Computer Science", "Finance", "Business"].map((category) => (
                               <div key={category} className="flex items-center">
-                                <Checkbox 
+                                <Checkbox
                                   id={`category-${category}`}
                                   checked={applicantFilters.category.includes(category)}
                                   onCheckedChange={(checked) => {
                                     if (checked) {
-                                      handleApplicantFilterChange('category', [...applicantFilters.category, category])
+                                      handleApplicantFilterChange('category', [...applicantFilters.category, category]);
                                     } else {
-                                      handleApplicantFilterChange('category', applicantFilters.category.filter(c => c !== category))
+                                      handleApplicantFilterChange('category', applicantFilters.category.filter(c => c !== category));
                                     }
-                                  }}
-                                />
+                                  } } />
                                 <label htmlFor={`category-${category}`} className="ml-2 text-sm font-medium">
                                   {category}
                                 </label>
@@ -235,17 +257,16 @@ export default function EmployerDashboard() {
                           <div className="space-y-2">
                             {["B.S.", "M.S.", "Ph.D."].map((level) => (
                               <div key={level} className="flex items-center">
-                                <Checkbox 
+                                <Checkbox
                                   id={`education-${level}`}
                                   checked={applicantFilters.educationLevel.includes(level)}
                                   onCheckedChange={(checked) => {
                                     if (checked) {
-                                      handleApplicantFilterChange('educationLevel', [...applicantFilters.educationLevel, level])
+                                      handleApplicantFilterChange('educationLevel', [...applicantFilters.educationLevel, level]);
                                     } else {
-                                      handleApplicantFilterChange('educationLevel', applicantFilters.educationLevel.filter(l => l !== level))
+                                      handleApplicantFilterChange('educationLevel', applicantFilters.educationLevel.filter(l => l !== level));
                                     }
-                                  }}
-                                />
+                                  } } />
                                 <label htmlFor={`education-${level}`} className="ml-2 text-sm font-medium">
                                   {level}
                                 </label>
@@ -258,17 +279,16 @@ export default function EmployerDashboard() {
                           <div className="space-y-2">
                             {["0-2 years", "3-5 years", "5+ years"].map((exp) => (
                               <div key={exp} className="flex items-center">
-                                <Checkbox 
+                                <Checkbox
                                   id={`experience-${exp}`}
                                   checked={applicantFilters.experience.includes(exp)}
                                   onCheckedChange={(checked) => {
                                     if (checked) {
-                                      handleApplicantFilterChange('experience', [...applicantFilters.experience, exp])
+                                      handleApplicantFilterChange('experience', [...applicantFilters.experience, exp]);
                                     } else {
-                                      handleApplicantFilterChange('experience', applicantFilters.experience.filter(e => e !== exp))
+                                      handleApplicantFilterChange('experience', applicantFilters.experience.filter(e => e !== exp));
                                     }
-                                  }}
-                                />
+                                  } } />
                                 <label htmlFor={`experience-${exp}`} className="ml-2 text-sm font-medium">
                                   {exp}
                                 </label>
@@ -281,17 +301,16 @@ export default function EmployerDashboard() {
                           <div className="space-y-2">
                             {["React", "Python", "SQL", "Machine Learning"].map((skill) => (
                               <div key={skill} className="flex items-center">
-                                <Checkbox 
+                                <Checkbox
                                   id={`skill-${skill}`}
                                   checked={applicantFilters.skills.includes(skill)}
                                   onCheckedChange={(checked) => {
                                     if (checked) {
-                                      handleApplicantFilterChange('skills', [...applicantFilters.skills, skill])
+                                      handleApplicantFilterChange('skills', [...applicantFilters.skills, skill]);
                                     } else {
-                                      handleApplicantFilterChange('skills', applicantFilters.skills.filter(s => s !== skill))
+                                      handleApplicantFilterChange('skills', applicantFilters.skills.filter(s => s !== skill));
                                     }
-                                  }}
-                                />
+                                  } } />
                                 <label htmlFor={`skill-${skill}`} className="ml-2 text-sm font-medium">
                                   {skill}
                                 </label>
@@ -356,8 +375,7 @@ export default function EmployerDashboard() {
                                       <Textarea
                                         placeholder="Enter your note here..."
                                         value={quickNote}
-                                        onChange={(e) => setQuickNote(e.target.value)}
-                                      />
+                                        onChange={(e) => setQuickNote(e.target.value)} />
                                     </div>
                                     <DialogFooter>
                                       <Button type="submit">Save Note</Button>
@@ -369,6 +387,10 @@ export default function EmployerDashboard() {
                                   Invite to Zoom
                                 </Button>
                                 <Button variant="default" size="sm">View Application</Button>
+                                <Button variant="default" size="sm" onClick={() => handleStartChat(applicant)}>
+                                  <MessageCircleIcon className="h-4 w-4 mr-2" />
+                                  Start Chat
+                                </Button>
                               </div>
                             </div>
                           </CardContent>
@@ -407,8 +429,7 @@ export default function EmployerDashboard() {
                       name="name"
                       value={profile.name}
                       onChange={handleProfileInputChange}
-                      required
-                    />
+                      required />
                   </div>
 
                   <div>
@@ -419,8 +440,7 @@ export default function EmployerDashboard() {
                       value={profile.website}
                       onChange={handleProfileInputChange}
                       type="url"
-                      required
-                    />
+                      required />
                   </div>
 
                   <div>
@@ -430,8 +450,7 @@ export default function EmployerDashboard() {
                       name="description"
                       value={profile.description}
                       onChange={handleProfileInputChange}
-                      required
-                    />
+                      required />
                   </div>
 
                   <div>
@@ -440,8 +459,7 @@ export default function EmployerDashboard() {
                       id="culture"
                       name="culture"
                       value={profile.culture}
-                      onChange={handleProfileInputChange}
-                    />
+                      onChange={handleProfileInputChange} />
                   </div>
 
                   <div>
@@ -450,8 +468,7 @@ export default function EmployerDashboard() {
                       id="benefits"
                       name="benefits"
                       value={profile.benefits}
-                      onChange={handleProfileInputChange}
-                    />
+                      onChange={handleProfileInputChange} />
                   </div>
 
                   <div>
@@ -460,8 +477,7 @@ export default function EmployerDashboard() {
                       id="diversity"
                       name="diversity"
                       value={profile.diversity}
-                      onChange={handleProfileInputChange}
-                    />
+                      onChange={handleProfileInputChange} />
                   </div>
 
                   <Button type="submit">Update Profile</Button>
@@ -488,43 +504,38 @@ export default function EmployerDashboard() {
                       <Input
                         id="title"
                         value={newEvent.title}
-                        onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
-                        required
-                      />
+                        onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+                        required />
                     </div>
                     <div>
                       <Label htmlFor="date">Event Date</Label>
                       <DatePicker
                         id="date"
                         selected={newEvent.date ? new Date(newEvent.date) : null}
-                        onChange={(date: Date | null) => setNewEvent({...newEvent, date: date ? date.toISOString().split('T')[0] : ''})}
-                        required
-                      />
+                        onChange={(date: Date | null) => setNewEvent({ ...newEvent, date: date ? date.toISOString().split('T')[0] : '' })}
+                        required />
                     </div>
                     <div>
                       <Label htmlFor="location">Location</Label>
                       <Input
                         id="location"
                         value={newEvent.location}
-                        onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
-                        required
-                      />
+                        onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+                        required />
                     </div>
                     <div>
                       <Label htmlFor="description">Description</Label>
                       <Textarea
                         id="description"
                         value={newEvent.description}
-                        onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
-                        required
-                      />
+                        onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+                        required />
                     </div>
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="isActive"
                         checked={newEvent.isActive}
-                        onCheckedChange={(checked) => setNewEvent({...newEvent, isActive: checked})}
-                      />
+                        onCheckedChange={(checked) => setNewEvent({ ...newEvent, isActive: checked })} />
                       <Label htmlFor="isActive">Active</Label>
                     </div>
                     <Button type="submit">Create Event</Button>
@@ -550,8 +561,7 @@ export default function EmployerDashboard() {
                         <TableCell>
                           <Switch
                             checked={event.isActive}
-                            onCheckedChange={() => toggleEventStatus(event.id)}
-                          />
+                            onCheckedChange={() => toggleEventStatus(event.id)} />
                         </TableCell>
                         <TableCell>
                           <Button variant="ghost" size="sm">
@@ -602,6 +612,6 @@ export default function EmployerDashboard() {
           </TabsContent>
         </Tabs>
       </main>
-    </div>
+    </>
   )
 }

@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { SendIcon, SearchIcon, MoreVertical } from 'lucide-react'
+import MyNavbar from '../navbar'
 
 export default function Inbox() {
   const [selectedConversation, setSelectedConversation] = useState<number | null>(null)
@@ -45,6 +46,8 @@ export default function Inbox() {
   )
 
   return (
+    <div>
+    <MyNavbar />
     <div className="flex h-screen bg-background">
       <div className="w-1/3 border-r border-border">
         <div className="p-4 border-b border-border">
@@ -157,6 +160,7 @@ export default function Inbox() {
           </div>
         )}
       </div>
+    </div>
     </div>
   )
 }
