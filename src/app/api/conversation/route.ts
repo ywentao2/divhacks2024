@@ -2,6 +2,7 @@ import dbConnect from '@/utils/dbConnect'
 import Conversation from  '@/models/Conversation'
 import { NextResponse } from 'next/server'
 
+
 export async function GET(request: Request){
     await dbConnect()
     const res = await request.json()
@@ -19,6 +20,7 @@ export async function POST(){
     })
 
     await conversation.save()
+    console.log(conversation.id)
 
     return NextResponse.json({ conversation })
 }

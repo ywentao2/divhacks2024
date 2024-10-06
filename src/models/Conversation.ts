@@ -4,9 +4,6 @@ import Message from './Message'
 import User from './User'
 
 interface Conversation {
-    users: [
-        String
-    ]
     messages: [
         typeof Message
     ]
@@ -14,8 +11,7 @@ interface Conversation {
 
 const ConversationSchema: mongoose.Schema<Conversation> = new mongoose.Schema(
     {
-        users: { type: [String], required: true },
-        messages: { type: [Message], required: true }
+        messages: { type: [], required: true }
     }
 )
 

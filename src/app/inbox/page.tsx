@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -11,38 +11,21 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { SendIcon, SearchIcon, MoreVertical } from 'lucide-react'
 
 export default function Inbox() {
-  const [selectedConversation, setSelectedConversation] = useState<number | null>(null)
+  const [selectedConversation, setSelectedConversation] = useState<string | null>(null)
   const [newMessage, setNewMessage] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
+  const [conversations, setConversations] = useState<any[]>([])
 
-  const conversations = [
-    { id: 1, with: "Sarah Johnson", company: "TechCorp Inc.", unread: 2, lastMessage: "Thanks for your interest in our company!", timestamp: "2023-07-10T14:30:00" },
-    { id: 2, with: "Michael Chen", company: "DataInsights Co.", unread: 0, lastMessage: "Looking forward to our meeting next week.", timestamp: "2023-07-09T11:15:00" },
-    { id: 3, with: "Emily Rodriguez", company: "DesignPro Agency", unread: 1, lastMessage: "Do you have any questions about the role?", timestamp: "2023-07-08T16:45:00" },
-    { id: 4, with: "David Kim", company: "FinTech Solutions", unread: 0, lastMessage: "Great to connect with you!", timestamp: "2023-07-07T09:30:00" },
-    { id: 5, with: "Lisa Wang", company: "AI Innovations", unread: 3, lastMessage: "We'd love to schedule an interview.", timestamp: "2023-07-06T13:20:00" },
-  ]
-
-  const messages = [
-    { id: 1, conversationId: 1, from: "Sarah Johnson", content: "Hi there! I saw your profile and I'm impressed with your skills.", timestamp: "2023-07-10T14:00:00" },
-    { id: 2, conversationId: 1, from: "You", content: "Thank you, Sarah! I'm very interested in opportunities at TechCorp.", timestamp: "2023-07-10T14:15:00" },
-    { id: 3, conversationId: 1, from: "Sarah Johnson", content: "Great! Let's schedule a call to discuss further.", timestamp: "2023-07-10T14:20:00" },
-    { id: 4, conversationId: 1, from: "You", content: "Sounds good! When would be a good time for you?", timestamp: "2023-07-10T14:25:00" },
-    { id: 5, conversationId: 1, from: "Sarah Johnson", content: "Thanks for your interest in our company!", timestamp: "2023-07-10T14:30:00" },
-  ]
-
-  const handleSendMessage = () => {
-    if (newMessage.trim() !== "") {
-      // Here you would typically send the message to your backend
-      console.log("Sending message:", newMessage)
-      setNewMessage("")
-    }
+  const fetchConversations = async () => {
+    const res = await fetch("/api/conversations")
+    const data = await res.json()
+    setConversations(data)
   }
 
-  const filteredConversations = conversations.filter(conversation =>
-    conversation.with.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    conversation.company.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  useEffect(() => {
+    fetchConversations()
+    console.log(conversations)
+  }, [])
 
   return (
     <div className="flex h-screen bg-background">
@@ -56,9 +39,9 @@ export default function Inbox() {
           />
         </div>
         <ScrollArea className="h-[calc(100vh-5rem)]">
-          {filteredConversations.map((conversation) => (
+          {conversations.map((conversation) => (
             <div
-              key={conversation.id}
+              key={conversation.id.toString()}
               className={`flex items-center justify-between p-4 cursor-pointer transition-colors ${
                 selectedConversation === conversation.id ? 'bg-accent' : 'hover:bg-accent/50'
               }`}
