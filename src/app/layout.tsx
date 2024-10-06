@@ -20,7 +20,6 @@ export default function RootLayout({
           {children}
         </body>
       </UserProvider>
-      <body>{children}</body>
     </html>
   );
 }
