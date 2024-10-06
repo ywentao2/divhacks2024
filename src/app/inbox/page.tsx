@@ -16,7 +16,13 @@ export default function Inbox() {
   const [newMessage, setNewMessage] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
   const [conversations, setConversations] = useState<any[]>([])
+  const [messages, setMessages] = useState<any[]>([])
 
+  const fetchMessages = async (conversationId: string) => {
+    const res = await fetch(`/api/conversations/${conversationId}/messages`)
+    const data = await res.json()
+    setMessages(data)
+  }
   const fetchConversations = async () => {
     const res = await fetch("/api/conversations")
     const data = await res.json()
@@ -28,6 +34,10 @@ export default function Inbox() {
     console.log(conversations)
   }, [])
 
+  function handleSendMessage() {
+    throw new Error('Function not implemented.')
+  }
+
   return (
     <div>
     <MyNavbar />
@@ -37,7 +47,7 @@ export default function Inbox() {
           <Input
             placeholder="Search conversations..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
           />
         </div>
@@ -52,7 +62,7 @@ export default function Inbox() {
             >
               <div className="flex items-center space-x-4">
                 <Avatar>
-                  <AvatarFallback>{conversation.with.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                  <AvatarFallback>{conversation.with.split(' ').map((n: any[]) => n[0]).join('')}</AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="font-medium">{conversation.with}</p>
@@ -81,7 +91,7 @@ export default function Inbox() {
               <div className="flex items-center space-x-4">
                 <Avatar>
                   <AvatarFallback>
-                    {conversations.find(c => c.id === selectedConversation)?.with.split(' ').map(n => n[0]).join('')}
+                    {conversations.find(c => c.id === selectedConversation)?.with.split(' ').map((n: any[]) => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
                 <div>
@@ -98,8 +108,8 @@ export default function Inbox() {
             <ScrollArea className="flex-1 p-4">
               <div className="space-y-4">
                 {messages
-                  .filter(m => m.conversationId === selectedConversation)
-                  .map((message) => (
+                  .filter((m: { conversationId: string }) => m.conversationId === selectedConversation)
+                  .map((message: { id: React.Key | null | undefined; from: string; content: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; timestamp: string | number | Date }) => (
                     <div key={message.id} className={`flex ${message.from === 'You' ? 'justify-end' : 'justify-start'}`}>
                       <div className={`max-w-[70%] p-3 rounded-lg ${message.from === 'You' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
                         <p className="text-sm">{message.content}</p>
