@@ -1,30 +1,66 @@
-import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import React, { use } from 'react';
+import { Navbar, Nav, Container, DropdownMenu } from 'react-bootstrap';
 import "./globals.css";
+import { Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar';
+import { DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@radix-ui/react-dropdown-menu';
+import { HomeIcon, GraduationCapIcon, InboxIcon, UserIcon, LogOutIcon } from 'lucide-react';
 
 const MyNavbar = () => {
+  const router = useRouter();
   return (
-    <Navbar className="bg-white shadow-sm py-3 fixed w-full z-10">
-      <Container className="flex justify-between items-center mx-auto max-w-screen-xl px-4">
-        <Navbar.Brand href="#home" className="flex items-center space-x-2">
-          <svg className="h-8 w-8 text-black" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span className="text-2xl font-bold text-black">NeuroTalent</span>
-        </Navbar.Brand>
-        <Nav className="flex items-center space-x-4">
-          <Nav.Link href="#features" className="text-black hover:text-gray-600">Features</Nav.Link>
-          <Nav.Link href="#faq" className="text-black hover:text-gray-600">FAQ</Nav.Link>
-          <Nav.Link href="/dashboard" className="text-black hover:text-gray-600">Dashboard</Nav.Link>
-        </Nav>
-        <div className="flex items-center space-x-4">
-          <button className="border border-gray-300 text-black px-3 py-1 rounded hover:bg-gray-100">Log In</button>
-          <button className="bg-black text-white px-3 py-1 rounded hover:bg-gray-800">Sign Up</button>
-        </div>
-      </Container>
-    </Navbar>
+    <header className="bg-white dark:bg-gray-800 shadow">
+  <div className="container mx-auto px-4 py-4">
+    <div className="flex items-center">
+      <div className="flex items-center space-x-2 flex-1">
+        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        <span className="text-lg font-bold">NeuroTalent</span>
+      </div>
+      <nav className="flex justify-center items-center flex-1">
+        <Button variant="ghost" className="flex items-center space-x-2">
+          <HomeIcon className="h-5 w-5" />
+          <span>Dashboard</span>
+        </Button>
+        <Button variant="ghost" className="flex items-center space-x-2">
+          <GraduationCapIcon className="h-5 w-5" />
+          <span>Alumni</span>
+        </Button>
+        <Button variant="ghost" className="flex items-center space-x-2">
+          <InboxIcon className="h-5 w-5" />
+          <span>Inbox</span>
+        </Button>
+      </nav>
+      <div className="flex items-center flex-1 justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Avatar>
+                <AvatarImage src="/placeholder-user.jpg" alt="User" />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>
+              <UserIcon className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <LogOutIcon className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
+  </div>
+</header>
   );
 };
 
