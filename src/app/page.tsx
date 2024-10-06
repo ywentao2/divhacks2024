@@ -39,21 +39,24 @@ export default function LandingPage() {
       <div>
         <MyNavbar />
         <main>
-          <section className="py-20 text-center">
-            <h1 className="text-4xl md:text-6xl mb-6 font-sans">
-              Diversity Matters. We're here for it.
-            </h1>
-            <p className="text-xl mb-8 max-w-2xl mx-auto text-gray-600 dark:text-gray-300">
-              NeuroTalent connects neurodivergent and disabled professionals with
-              inclusive employers, fostering a diverse and talented workforce.
-            </p>
-            <div className="flex justify-center space-x-4">
-              <Button className="bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:bg-opacity-90 text-lg px-8 py-3">
-                Contact Employers
-              </Button>
-              <Button className="bg-gray-600 text-white dark:bg-gray-300 dark:text-gray-900 hover:bg-opacity-90 text-lg px-8 py-3">
-                Company View
-              </Button>
+          <section className="py-20 px-4 text-center">
+            <div className="max-w-4xl mx-auto">
+              <h1 className="text-4xl md:text-6xl mb-6 font-sans">
+                Diversity Matters. We're Here For It.
+              </h1>
+              <p className="text-xl mb-8 mx-auto text-gray-600 dark:text-gray-300">
+                NeuroTalent connects neurodivergent and disabled professionals
+                with inclusive employers, fostering a diverse and talented
+                workforce.
+              </p>
+              <div className="flex flex-col items-center space-y-4">
+                <Button className="bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:bg-opacity-90 text-lg px-8 py-3 w-full max-w-xs">
+                  Explore Opportunities
+                </Button>
+                <Button className="bg-gray-600 text-white dark:bg-gray-300 dark:text-gray-900 hover:bg-opacity-90 text-lg px-8 py-3 w-full max-w-xs">
+                  Learn More
+                </Button>
+              </div>
             </div>
           </section>
 

@@ -8,64 +8,39 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Settings,
   HomeIcon,
   UserIcon,
   InboxIcon,
   GraduationCapIcon,
   LogOutIcon,
+  LogInIcon,
+  UserPlusIcon,
 } from "lucide-react";
+import { useUser } from '@auth0/nextjs-auth0/client';
 import "./globals.css";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "./media/neurotalent.png";
 
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 const MyNavbar = () => {
-
+  const { user } = useUser();
+  const isEmployer = user?.userType === "employer";
+  const dashboardLink = isEmployer
+    ? "/employer-dashboard"
+    : "/student-dashboard";
   const isEmployer = true;
   const { user, error, isLoading } = useUser();
 
   const dashboardLink = isEmployer  ? "/employer-dashboard" : "/student-dashboard";
-
   return (
     <header className="bg-white dark:bg-gray-800 shadow">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center">
-          <div className="flex items-center space-x-2 flex-1">
-            <Link href={"/"}>
-              <svg
-                className="h-6 w-6"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L2 7L12 12L22 7L12 2Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M2 17L12 22L22 17"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M2 12L12 17L22 12"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-            <Link className="text-lg font-bold" href={"/"}>
-              NeuroTalent
-            </Link>
+        <div className="flex justify-between items-center">
+          <div className="w-1/4 flex-shrink-0">
+            <Image src={logo} alt="Neurotalent Logo" className="h-8 w-auto" />
           </div>
           <nav className="flex justify-center items-center flex-1">
             <Link href={dashboardLink} className="flex items-center space-x-2">
@@ -81,7 +56,7 @@ const MyNavbar = () => {
               <span>Inbox</span>
             </Link>
           </nav>
-          <div className="flex items-center flex-1 justify-end">
+          <div className="w-1/4 flex justify-end">
             <DropdownMenu>
               {user ? (
                 <>
