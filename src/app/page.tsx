@@ -13,6 +13,9 @@ import {
 } from "lucide-react";
 import { Input } from "../components/ui/input";
 import MyNavbar from "./navbar";
+import Image from "next/image";
+import logo from "./media/neurotalent.png";
+import router, { useRouter } from "next/navigation";
 
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -34,6 +37,8 @@ export default function LandingPage() {
     alert("Thank you for your interest! We'll be in touch soon.");
   };
 
+  const router = useRouter();
+
   return (
     <>
       <div>
@@ -53,7 +58,7 @@ export default function LandingPage() {
                 <Button className="bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:bg-opacity-90 text-lg px-8 py-3 w-full max-w-xs">
                   Explore Opportunities
                 </Button>
-                <Button className="bg-gray-600 text-white dark:bg-gray-300 dark:text-gray-900 hover:bg-opacity-90 text-lg px-8 py-3 w-full max-w-xs">
+                <Button className="bg-gray-600 text-white dark:bg-gray-300 dark:text-gray-900 hover:bg-opacity-90 text-lg px-8 py-3 w-full max-w-xs" onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })}>
                   Learn More
                 </Button>
               </div>
@@ -222,37 +227,7 @@ export default function LandingPage() {
         <footer>
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                <svg
-                  className="h-6 w-6"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 2L2 7L12 12L22 7L12 2Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M2 17L12 22L22 17"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M2 12L12 17L22 12"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span className="text-xl font-bold">NeuroTalent</span>
-              </div>
+              <Image src={logo} alt="Neurotalent Logo" className="h-8 w-auto" />
               <nav className="flex space-x-4 mb-4 md:mb-0">
                 <a href="#features" className="hover:text-gray-500">
                   Features
@@ -274,7 +249,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
-              © 2023 NeuroTalent. All rights reserved.
+              © 2024 NeuroTalent. All rights reserved.
             </div>
             <div className="mt-4 flex justify-center space-x-4">
               <a
