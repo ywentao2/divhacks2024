@@ -36,10 +36,7 @@ const MyNavbar = () => {
           </div>
           <nav className="flex justify-center items-center p-4">
             <div className="flex space-x-8">
-              <Link
-                href={dashboardLink}
-                className="flex items-center space-x-2"
-              >
+              <Link href="/" className="flex items-center space-x-2">
                 <HomeIcon className="h-5 w-5" />
                 <span className="text-sm">Home</span>
               </Link>
@@ -83,10 +80,12 @@ const MyNavbar = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <UserIcon className="mr-2 h-4 w-4" />
-                      <span>Profile</span>
-                    </DropdownMenuItem>
+                    <Link href="/profile-settings">
+                      <DropdownMenuItem>
+                        <UserIcon className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                      </DropdownMenuItem>
+                    </Link>
                     <DropdownMenuItem>
                       <LogOutIcon className="mr-2 h-4 w-4" />
                       <span>
